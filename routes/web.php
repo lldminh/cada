@@ -21,7 +21,7 @@ Route::group(['prefix'=>'my/page'], function(){
 
   });
 
-  Route::get('hash', 'GetIgolfCountryList@pullCountryList');
+  Route::get('hash', 'IGolf\IGolfStateController@pullDataIGolf');
 
 });
 

@@ -1,21 +1,22 @@
 <?php
+
 namespace App\Helpers;
 
 class Helper{
 
-  public static function createSignature(var $timestampStr,var $actionCode) {
+  public static function createSignature($timestampStr, $actionCode) {
 
-          var $appApiKey= env("appApiKey");
-          var $apiVersion= env("apiVersion");
-          var $sigVersion= env("sigVersion");
-          var $sigMethod= env("sigMethod");
-          var $responseFormat= \Config::get('constant.JSON_FORMAT');
-          var $appApiSecretKey=env("appApiSecretKey");
+          $appApiKey= env("appApiKey");
+          $apiVersion= env("apiVersion");
+          $sigVersion= env("sigVersion");
+           $sigMethod= env("sigMethod");
+           $responseFormat= \Config::get('constant.JSON_FORMAT');
+           $appApiSecretKey=env("appApiSecretKey");
 
-          var $toSignStr = toSign($actionCode, $appApiKey, $apiVersion, $sigVersion, $sigMethod, $timestampStr, $responseFormat);
-          var $signature = null;
+           $toSignStr = Helper::toSign($actionCode, $appApiKey, $apiVersion, $sigVersion, $sigMethod, $timestampStr, $responseFormat);
+           $signature = null;
           try {
-              $signature = calculateSignature($toSignStr, $sigMethod, $appApiSecretKey);
+              $signature = Helper::calculateSignature($toSignStr, $sigMethod, $appApiSecretKey);
           } catch (\Exception $e) {
             report($e);
             return false;
@@ -23,22 +24,22 @@ class Helper{
           return $signature;
   }
 
-  private function toSign(var $actionCode, var $appApiKey, var $apiVersion, var $sigVersion,
-  var $sigMethod, var $timestampStr, var $responseFormat) {
-        var $builder = $actionCode."/".
-                .$appApiKey."/".
-                .$apiVersion."/".
-                .$sigVersion."/".
-                .$sigMethod."/".
-                .$timestampStr."/".
+  private static function toSign($actionCode, $appApiKey, $apiVersion, $sigVersion,
+  $sigMethod, $timestampStr, $responseFormat) {
+         $builder = $actionCode."/"
+                .$appApiKey."/"
+                .$apiVersion."/"
+                .$sigVersion."/"
+                .$sigMethod."/"
+                .$timestampStr."/"
                 .$responseFormat;
         return $builder;
   }
 
-  private function calculateSignature(var $toSignStr, var $signMethod,var $secretKey) {
+  private static function calculateSignature($toSignStr, $signMethod,$secretKey) {
 
     try {
-      $signMethod="sha1";
+      $signMethod="sha256";
 
       $hmac = hash_hmac($signMethod, $toSignStr, $secretKey, TRUE);
       $signature = base64_encode($hmac);
@@ -51,4 +52,4 @@ class Helper{
     }
   }
 
- ?>
+}

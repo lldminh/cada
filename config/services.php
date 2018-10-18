@@ -35,8 +35,6 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
-    'externalAPI'=>[
-      'igolf' => env('IGOLF_ENDPOINT','https://api-connect2.igolf.com')
-    ],
+
 
 ];
